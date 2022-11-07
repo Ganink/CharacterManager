@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
-public class NPCManagerBase : MonoBehaviour
+public class NPCManagerBase : MonoBehaviour, INPCManager
 {
     [Header("World Settings")]
     public float gravityScale = 0f;
