@@ -42,7 +42,6 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         switch (npcType)
         {
             case NPCType.NPC:
-                MoveToNextPoint();
                 break;
             case NPCType.Player:
                 MovePlayer();
@@ -141,6 +140,11 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
 
     virtual public void MoveToNextPoint()
     {
+    }
+
+    public NPCType GetNPCType()
+    {
+        return npcType;
     }
 }
 

@@ -28,15 +28,18 @@ public class NPCManager : NPCManagerBase
 
     private void Initialized()
     {
-        SetNPC();
-        inputPlayer = GetComponent<InputPlayer>();
-        characterController = new NPCController();
-        mainCamera = characterController.GetMainCamera();
-        playerSprite = GetComponent<SpriteRenderer>();
+        if (GetNPCType() == NPCType.Player)
+        {
+            SetNPC();
+            inputPlayer = GetComponent<InputPlayer>();
+            characterController = new NPCController();
+            mainCamera = characterController.GetMainCamera();
+            playerSprite = GetComponent<SpriteRenderer>();
 #if PLATFORM_IOS
-        joystick.gameObject.SetActive(true);
-        joystick = FindObjectOfType<JoystickManager>();
+            joystick.gameObject.SetActive(true);
+            joystick = FindObjectOfType<JoystickManager>();
 #endif
+        }
     }
 
     protected void Update()
@@ -56,17 +59,19 @@ public class NPCManager : NPCManagerBase
 
     public override void MovePlayer()
     {
-        base.MovePlayer();
-        Vector3 mov = new Vector3();
-        
-#if PLATFORM_IOS 
-        mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
-        transform.position = Vector3.MoveTowards(
-            transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+        if (GetNPCType() == NPCType.Player)
+        {
+            base.MovePlayer();
+            Vector3 mov = new Vector3();
 
-        Horizontal = joystick.Horizontal;
-        Vertical = joystick.Vertical;
-        
+#if PLATFORM_IOS
+            mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
+            transform.position = Vector3.MoveTowards(
+                transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+
+            Horizontal = joystick.Horizontal;
+            Vertical = joystick.Vertical;
+
 #elif UNITY_EDITOR
         mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
         transform.position = Vector3.MoveTowards(transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
@@ -75,7 +80,13 @@ public class NPCManager : NPCManagerBase
         Vertical = inputPlayer.axisVertical;
 #endif
 
+        }
         FlipSprite();
+    }
+
+    public InputPlayer GetInputPlayer()
+    {
+        return inputPlayer;
     }
 
     private void FlipSprite()

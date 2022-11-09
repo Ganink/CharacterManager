@@ -16,8 +16,8 @@ public class InputPlayer : MonoBehaviour
     //inventory
     public bool isInventoryEnable { get; private set; }
 
-    //actions
-    public bool playerActionEnable { get; private set; }
+    //Action
+    public bool isActionEnable { get; private set; }
 
     public bool LogActive = false;
 
@@ -32,7 +32,9 @@ public class InputPlayer : MonoBehaviour
         axisVertical = Input.GetAxis("Vertical");
 
         isJump = Input.GetButton("Jump");
-        isInventoryEnable = Input.GetButtonDown("Inventory");
+        isInventoryEnable = Input.GetButton("Inventory");
+        isActionEnable = Input.GetButton("Action");
+
         SetLookDir();
 
         if (LogActive == true)
@@ -41,7 +43,7 @@ public class InputPlayer : MonoBehaviour
             Debug.Log("specialAttack1 ?: " + isSpecialAttack1Enable);
             Debug.Log("specialAttack2?: " + isSpecialAttack2Enable);
             Debug.Log("isInventoryEnable?: " + isInventoryEnable);
-            Debug.Log("playerActionEnable?: " + playerActionEnable);
+            Debug.Log("playerActionEnable?: " + isActionEnable);
         }
     }
 
