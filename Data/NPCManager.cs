@@ -98,6 +98,9 @@ public class NPCManager : NPCManagerBase
 
     public InputPlayer GetInputPlayer()
     {
+        if (inputPlayer == null)
+            inputPlayer = GetComponent<InputPlayer>();
+
         return inputPlayer;
     }
 

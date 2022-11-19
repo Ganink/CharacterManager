@@ -47,6 +47,16 @@ public class InputPlayer : MonoBehaviour
         }
     }
 
+    public void SetPrimaryAction(bool value)
+    {
+        isActionEnable = value;
+    }
+
+    public bool GetPrimaryActionPressed()
+    {
+        return isActionEnable;
+    }
+
     private void SetLookDir()
     {
         Debug.DrawLine(transform.position, transform.position + (Vector3)lookDir.normalized * 3, Color.green);
