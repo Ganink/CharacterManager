@@ -22,7 +22,9 @@ public class NPCManager : NPCManagerBase
     private float Horizontal;
     private float Vertical;
     private SpriteRenderer playerSprite;
-
+    private Animator animator;
+    private int hasCodeRun;
+    
     private void Start()
     {
         Initialized();
@@ -37,7 +39,10 @@ public class NPCManager : NPCManagerBase
             characterController = new NPCController();
             mainCamera = characterController.GetMainCamera();
             playerSprite = GetComponent<SpriteRenderer>();
+            animator = GetComponent<Animator>();
             canMove = true;
+            hasCodeRun = Animator.StringToHash("walk");
+            
 #if PLATFORM_IOS
             joystick.gameObject.SetActive(true);
             joystick = FindObjectOfType<JoystickManager>();
@@ -56,14 +61,6 @@ public class NPCManager : NPCManagerBase
         base.Update();
         //JumpController(NPCType.Player, inputPlayer);
         MoveNPC(NPCType.Player, inputPlayer);
-
-#if INVENTORY_MANAGER
-        if (inputPlayer.isInventoryEnable)
-        {
-            var inventory = GameObject.FindObjectOfType<InventoryManager>(true);
-            inventory.gameObject.SetActive(!inventory.gameObject.activeSelf);
-        }
-#endif
     }
 
     public override void MovePlayer()
@@ -92,10 +89,35 @@ public class NPCManager : NPCManagerBase
 #endif
             }
 
+            SetNPCAnimation();
         }
         FlipSprite();
     }
 
+    private void SetNPCAnimation()
+    {
+        if (Horizontal != 0 || Vertical != 0)
+        {
+            SetAnimPosition();
+            animator.SetBool(hasCodeRun, true);
+        }
+        else
+        {
+            animator.SetBool(hasCodeRun, false);
+        }
+
+        /*if (Input.GetButtonDown("PlayerAttack"))
+        {
+            animator.SetBool("AttackEnable", true);
+            //attackController.PlayerAttack(inputPlayer.lookDir, playerAttributes.Damage); // maybe we can use events animation
+        }*/
+    }
+
+    private void SetAnimPosition() {
+        animator.SetFloat("Horizontal", Horizontal);
+        animator.SetFloat("Vertical", Vertical);
+    }
+    
     public InputPlayer GetInputPlayer()
     {
         if (inputPlayer == null)
