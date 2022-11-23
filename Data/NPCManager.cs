@@ -15,7 +15,6 @@ public class NPCManager : NPCManagerBase
     private JoystickManager joystick;
 #endif
 
-    private Vector3 cameraPos;
     private InputPlayer inputPlayer;
     private NPCController characterController;
 
@@ -37,7 +36,7 @@ public class NPCManager : NPCManagerBase
             SetNPC();
             inputPlayer = GetComponent<InputPlayer>();
             characterController = new NPCController();
-            mainCamera = characterController.GetMainCamera();
+            characterController.SetMainCamera(this.transform);
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             canMove = true;
@@ -59,7 +58,6 @@ public class NPCManager : NPCManagerBase
     protected void Update()
     {
         base.Update();
-        //JumpController(NPCType.Player, inputPlayer);
         MoveNPC(NPCType.Player, inputPlayer);
     }
 

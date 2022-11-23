@@ -1,19 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
-public class NPCController 
+public class NPCController
 {
-    public GameObject GetMainCamera()
+    private CinemachineVirtualCamera CVC;
+    public void SetMainCamera(Transform playerPos)
     {
-        /*var newCamera  = GameObject.Instantiate(Resources.Load<GameObject>("Cameras/main-camera"));
-        if (newCamera == null)
-        {
-            Debug.LogError("Not camera found");
-            return null;
-        }
-
-        return newCamera;*/
-        return Camera.main.gameObject;
+        CVC = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
+        CVC.Follow = playerPos;
     }
 }
