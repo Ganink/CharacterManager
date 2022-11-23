@@ -87,7 +87,7 @@ public class NPCManager : NPCManagerBase
 #endif
             }
 
-            SetNPCAnimation();
+            //SetNPCAnimation();
         }
         FlipSprite();
     }
