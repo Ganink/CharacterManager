@@ -43,8 +43,8 @@ public class NPCManager : NPCManagerBase
             hasCodeRun = Animator.StringToHash("walk");
             
 #if PLATFORM_IOS
-            joystick.gameObject.SetActive(true);
             joystick = FindObjectOfType<JoystickManager>();
+            joystick.gameObject.SetActive(true);
 #endif
         }
     }
