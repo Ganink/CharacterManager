@@ -36,17 +36,24 @@ public class NPCManager : NPCManagerBase
             SetNPC();
             inputPlayer = GetComponent<InputPlayer>();
             characterController = new NPCController();
+            mainCamera = GetCamera();
             characterController.SetMainCamera(this.transform);
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             canMove = true;
             hasCodeRun = Animator.StringToHash("walk");
-            
+
 #if PLATFORM_IOS
             joystick = FindObjectOfType<JoystickManager>();
             joystick.gameObject.SetActive(true);
 #endif
         }
+    }
+
+    private GameObject GetCamera()
+    {
+        var copyCamera = Instantiate(mainCamera, this.transform);
+        return copyCamera;
     }
 
     public void SetCanMove(bool state)
