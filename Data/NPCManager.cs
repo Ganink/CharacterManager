@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(InputPlayer))]
@@ -6,8 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class NPCManager : NPCManagerBase
 {
-    [SerializeField]
-    private GameObject mainCamera;
+    [SerializeField] private GameObject mainCamera;
     [SerializeField] bool canMove;
 
 #if PLATFORM_IOS
@@ -23,9 +23,10 @@ public class NPCManager : NPCManagerBase
     private SpriteRenderer playerSprite;
     private Animator animator;
     private int hasCodeRun;
-    
-    private void Start()
+
+    protected void Start()
     {
+        base.Start();
         Initialized();
     }
 
@@ -65,6 +66,18 @@ public class NPCManager : NPCManagerBase
     protected void Update()
     {
         base.Update();
+#if PHOTON_UNITY_NETWORKING
+        if (PhotonNetwork.InRoom && !gameObject.GetComponent<PhotonView>().IsMine)
+        {
+            if (gameObject.GetComponentInChildren<PanelChat>() != null)
+            {
+                gameObject.GetComponentInChildren<PanelChat>().gameObject.SetActive(false);
+            }  
+            mainCamera.SetActive(false);
+            return;
+        }
+#endif
+
         MoveNPC(NPCType.Player, inputPlayer);
     }
 
@@ -85,17 +98,18 @@ public class NPCManager : NPCManagerBase
             Horizontal = joystick.Horizontal;
             Vertical = joystick.Vertical;
 
-#elif UNITY_EDITOR
+#endif
                 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
-                transform.position = Vector3.MoveTowards(transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
+                    GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
                 Horizontal = inputPlayer.axisHorizontal;
                 Vertical = inputPlayer.axisVertical;
-#endif
             }
 
             //SetNPCAnimation();
         }
+
         FlipSprite();
     }
 
@@ -118,11 +132,12 @@ public class NPCManager : NPCManagerBase
         }*/
     }
 
-    private void SetAnimPosition() {
+    private void SetAnimPosition()
+    {
         animator.SetFloat("Horizontal", Horizontal);
         animator.SetFloat("Vertical", Vertical);
     }
-    
+
     public InputPlayer GetInputPlayer()
     {
         if (inputPlayer == null)
@@ -142,5 +157,4 @@ public class NPCManager : NPCManagerBase
             playerSprite.flipX = true;
         }
     }
-
 }

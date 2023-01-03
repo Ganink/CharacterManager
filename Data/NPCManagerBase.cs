@@ -1,4 +1,6 @@
 ﻿using System;
+using IngameDebugConsole;
+using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -20,6 +22,11 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
     [HideInInspector] public Transform thisTransform;
     [HideInInspector] public bool facingRight = true;
 
+    public void Start()
+    {
+        CommandHelper.AddConsoleCheats("npcmanager.getcainfo", "current caracter attributes user", () => GetCharacterAttributesInfo());
+    }
+
     public void SetNPC()
     {
         thisTransform = transform;
@@ -34,7 +41,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
 
     public void Update()
     {
-        
+
     }
 
     public void MoveNPC(NPCType npcType, InputPlayer inputPlayer = null)
@@ -145,6 +152,12 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
     public NPCType GetNPCType()
     {
         return npcType;
+    }
+
+    private void GetCharacterAttributesInfo()
+    {
+        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} lifepoints: {npcAttributes.lifePoints} manaPoints: {npcAttributes.manaPoints} speedUser: {npcAttributes.speedUser}";
+        Debug.Log(CAInfo);
     }
 }
 
