@@ -10,7 +10,7 @@ public class NPCManager : NPCManagerBase
     [SerializeField] private GameObject mainCamera;
     [SerializeField] bool canMove;
 
-#if PLATFORM_IOS
+#if PLATFORM_IOS || UNITY_ANDROID
     [SerializeField]
     private JoystickManager joystick;
 #endif
@@ -44,9 +44,9 @@ public class NPCManager : NPCManagerBase
             animator = GetComponent<Animator>();
             canMove = true;
             //hasCodeRun = Animator.StringToHash("walk");
-
-#if PLATFORM_IOS
-            joystick = FindObjectOfType<JoystickManager>();
+            
+#if PLATFORM_IOS || UNITY_ANDROID
+            joystick = FindObjectOfType<JoystickManager>(true);
             joystick.gameObject.SetActive(true);
 #endif
         }
@@ -91,21 +91,22 @@ public class NPCManager : NPCManagerBase
                 base.MovePlayer();
                 Vector3 mov = new Vector3();
 
-#if PLATFORM_IOS
+#if PLATFORM_IOS || UNITY_ANDROID
             mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
             transform.position = Vector3.MoveTowards(
                 transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
             Horizontal = joystick.Horizontal;
             Vertical = joystick.Vertical;
-
-#endif
+            
+#else
                 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
                     GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
                 Horizontal = inputPlayer.axisHorizontal;
                 Vertical = inputPlayer.axisVertical;
+#endif                
             }
 
             SetNPCAnimation();
