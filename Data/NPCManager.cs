@@ -39,6 +39,7 @@ public class NPCManager : NPCManagerBase
             characterController = new NPCController();
             mainCamera = GetCamera();
             characterController.SetMainCamera(this.transform);
+            MinimapSettings.Instance.SetMinimap(this.transform); //need abstract more this call
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             canMove = true;
