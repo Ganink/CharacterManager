@@ -43,7 +43,7 @@ public class NPCManager : NPCManagerBase
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             canMove = true;
-            hasCodeRun = Animator.StringToHash("walk");
+            //hasCodeRun = Animator.StringToHash("walk");
 
 #if PLATFORM_IOS
             joystick = FindObjectOfType<JoystickManager>();
@@ -108,7 +108,7 @@ public class NPCManager : NPCManagerBase
                 Vertical = inputPlayer.axisVertical;
             }
 
-            //SetNPCAnimation();
+            SetNPCAnimation();
         }
 
         FlipSprite();
@@ -119,11 +119,11 @@ public class NPCManager : NPCManagerBase
         if (Horizontal != 0 || Vertical != 0)
         {
             SetAnimPosition();
-            animator.SetBool(hasCodeRun, true);
+            //animator.SetBool(hasCodeRun, true);
         }
         else
         {
-            animator.SetBool(hasCodeRun, false);
+            //animator.SetBool(hasCodeRun, false);
         }
 
         /*if (Input.GetButtonDown("PlayerAttack"))
