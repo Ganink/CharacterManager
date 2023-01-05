@@ -2,6 +2,7 @@ using System;
 using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(UserSettings))]
 [RequireComponent(typeof(InputPlayer))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
