@@ -58,8 +58,6 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
             case NPCType.Boss:
                 break;
         }
-
-
     }
 
     public void JumpController(NPCType npcType, InputPlayer inputPlayer = null)
@@ -133,8 +131,6 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         transform.position += (Vector3)dirToTarget *
                               (npcAttributes.speedUser * Time.deltaTime);
     }
-
-
 
     public NPCAttributesSO GetCharacterAttributes()
     {
