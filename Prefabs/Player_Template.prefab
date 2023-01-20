@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3422613731848821154}
   - component: {fileID: 3422613731848821182}
   - component: {fileID: -2481395506296318369}
+  - component: {fileID: 1892374150726764874}
   m_Layer: 0
   m_Name: Player_Template
   m_TagString: Player
@@ -110,7 +111,7 @@ MonoBehaviour:
   mainCollider: {fileID: 0}
   thisTransform: {fileID: 0}
   facingRight: 1
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 9069930817853028015, guid: e5d039c3fc42395408e91f57bfb3c9c8, type: 3}
   canMove: 0
 --- !u!114 &3422613731848821155
 MonoBehaviour:
@@ -183,3 +184,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1892374150726764874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422613731848821177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7795e8672a80d485f8f6eb4640f0b442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLifes: 1000
+  currentLifes: 1000
