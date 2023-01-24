@@ -6,10 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(InputPlayer))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(AttackManager))]
 public class NPCManager : NPCManagerBase
 {
     [SerializeField] private GameObject mainCamera;
     [SerializeField] bool canMove;
+    [SerializeField] AttackManager attackManager;
 
 #if PLATFORM_IOS || UNITY_ANDROID
     [SerializeField]
@@ -43,9 +45,10 @@ public class NPCManager : NPCManagerBase
             MinimapSettings.Instance.SetMinimap(this.transform); //need abstract more this call
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
+            attackManager = GetComponent<AttackManager>();
             canMove = true;
             //hasCodeRun = Animator.StringToHash("walk");
-            
+
 #if PLATFORM_IOS || UNITY_ANDROID
             joystick = FindObjectOfType<JoystickManager>(true);
             joystick.gameObject.SetActive(true);
@@ -74,7 +77,7 @@ public class NPCManager : NPCManagerBase
             if (gameObject.GetComponentInChildren<PanelChat>() != null)
             {
                 gameObject.GetComponentInChildren<PanelChat>().gameObject.SetActive(false);
-            }  
+            }
             mainCamera.SetActive(false);
             return;
         }
@@ -109,7 +112,12 @@ public class NPCManager : NPCManagerBase
                 Vertical = inputPlayer.axisVertical;
 #endif                
             }
+            if (inputPlayer.isAttack)
+            {
+                animator.SetTrigger("Attack");
+                attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
 
+            }
             SetNPCAnimation();
         }
 
