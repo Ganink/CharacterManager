@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 3422613731848821154}
   - component: {fileID: 3422613731848821182}
   - component: {fileID: -2481395506296318369}
+  - component: {fileID: 1892374150726764874}
+  - component: {fileID: 701380792654533536}
   m_Layer: 0
   m_Name: Player_Template
   m_TagString: Player
@@ -110,8 +112,9 @@ MonoBehaviour:
   mainCollider: {fileID: 0}
   thisTransform: {fileID: 0}
   facingRight: 1
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 9069930817853028015, guid: e5d039c3fc42395408e91f57bfb3c9c8, type: 3}
   canMove: 0
+  attackManager: {fileID: 0}
 --- !u!114 &3422613731848821155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +176,7 @@ Animator:
   m_GameObject: {fileID: 3422613731848821177}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a14de87e85a71c47a0323c43b0eb645, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -183,3 +186,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1892374150726764874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422613731848821177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7795e8672a80d485f8f6eb4640f0b442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLifes: 1000
+  currentLifes: 1000
+--- !u!114 &701380792654533536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422613731848821177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b9d9de0cc8e1f44da23c30c1a11ef4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 1
+  hitBox: {x: 1, y: 1}
+  layerAttack:
+    serializedVersion: 2
+    m_Bits: 256

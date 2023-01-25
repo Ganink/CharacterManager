@@ -1,16 +1,19 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(UserSettings))]
 [RequireComponent(typeof(InputPlayer))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(AttackManager))]
 public class NPCManager : NPCManagerBase
 {
-    [SerializeField]
-    private GameObject mainCamera;
+    [SerializeField] private GameObject mainCamera;
     [SerializeField] bool canMove;
+    [SerializeField] AttackManager attackManager;
 
-#if PLATFORM_IOS
+#if PLATFORM_IOS || UNITY_ANDROID
     [SerializeField]
     private JoystickManager joystick;
 #endif
@@ -23,9 +26,10 @@ public class NPCManager : NPCManagerBase
     private SpriteRenderer playerSprite;
     private Animator animator;
     private int hasCodeRun;
-    
-    private void Start()
+
+    protected void Start()
     {
+        base.Start();
         Initialized();
     }
 
@@ -38,14 +42,17 @@ public class NPCManager : NPCManagerBase
             characterController = new NPCController();
             mainCamera = GetCamera();
             characterController.SetMainCamera(this.transform);
+            MinimapSettings.Instance.SetMinimap(this.transform); //need abstract more this call
             playerSprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
+            attackManager = GetComponent<AttackManager>();
             canMove = true;
-            hasCodeRun = Animator.StringToHash("walk");
+            //hasCodeRun = Animator.StringToHash("walk");
 
-#if PLATFORM_IOS
-            joystick = FindObjectOfType<JoystickManager>();
+#if PLATFORM_IOS || UNITY_ANDROID
+            joystick = FindObjectOfType<JoystickManager>(true);
             joystick.gameObject.SetActive(true);
+            MobileAction();
 #endif
         }
     }
@@ -65,6 +72,18 @@ public class NPCManager : NPCManagerBase
     protected void Update()
     {
         base.Update();
+#if PHOTON_UNITY_NETWORKING
+        if (PhotonNetwork.InRoom && !gameObject.GetComponent<PhotonView>().IsMine)
+        {
+            if (gameObject.GetComponentInChildren<PanelChat>() != null)
+            {
+                gameObject.GetComponentInChildren<PanelChat>().gameObject.SetActive(false);
+            }
+            mainCamera.SetActive(false);
+            return;
+        }
+#endif
+
         MoveNPC(NPCType.Player, inputPlayer);
     }
 
@@ -77,7 +96,7 @@ public class NPCManager : NPCManagerBase
                 base.MovePlayer();
                 Vector3 mov = new Vector3();
 
-#if PLATFORM_IOS
+#if PLATFORM_IOS || UNITY_ANDROID
             mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
             transform.position = Vector3.MoveTowards(
                 transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
@@ -85,17 +104,25 @@ public class NPCManager : NPCManagerBase
             Horizontal = joystick.Horizontal;
             Vertical = joystick.Vertical;
 
-#elif UNITY_EDITOR
+#else
                 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
-                transform.position = Vector3.MoveTowards(transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
+                    GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
                 Horizontal = inputPlayer.axisHorizontal;
                 Vertical = inputPlayer.axisVertical;
+
+                if (inputPlayer.isAttack)
+                {
+                    animator.SetTrigger("Attack");
+                    attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
+                }
 #endif
             }
 
-            //SetNPCAnimation();
+            SetNPCAnimation();
         }
+
         FlipSprite();
     }
 
@@ -104,11 +131,11 @@ public class NPCManager : NPCManagerBase
         if (Horizontal != 0 || Vertical != 0)
         {
             SetAnimPosition();
-            animator.SetBool(hasCodeRun, true);
+            //animator.SetBool(hasCodeRun, true);
         }
         else
         {
-            animator.SetBool(hasCodeRun, false);
+            //animator.SetBool(hasCodeRun, false);
         }
 
         /*if (Input.GetButtonDown("PlayerAttack"))
@@ -118,11 +145,12 @@ public class NPCManager : NPCManagerBase
         }*/
     }
 
-    private void SetAnimPosition() {
+    private void SetAnimPosition()
+    {
         animator.SetFloat("Horizontal", Horizontal);
         animator.SetFloat("Vertical", Vertical);
     }
-    
+
     public InputPlayer GetInputPlayer()
     {
         if (inputPlayer == null)
@@ -143,4 +171,20 @@ public class NPCManager : NPCManagerBase
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+#if PLATFORM_IOS || UNITY_ANDROID
+
+        MobileAction();
+#endif
+    }
+
+    private void MobileAction()
+    {
+        EventManager.Instance.RegisterEvent("PrimaryAction", () =>
+        {
+            animator.SetTrigger("Attack");
+            attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
+        });
+    }
 }

@@ -31,9 +31,10 @@ public class InputPlayer : MonoBehaviour
         axisHorizontal = Input.GetAxis("Horizontal");
         axisVertical = Input.GetAxis("Vertical");
 
-        isJump = Input.GetButton("Jump");
+        //isJump = Input.GetButton("Jump");
         isInventoryEnable = Input.GetButton("Inventory");
         isActionEnable = Input.GetButton("Action");
+        isAttack = Input.GetButton("Attack");
 
         SetLookDir();
 
