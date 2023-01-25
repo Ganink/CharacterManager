@@ -52,6 +52,7 @@ public class NPCManager : NPCManagerBase
 #if PLATFORM_IOS || UNITY_ANDROID
             joystick = FindObjectOfType<JoystickManager>(true);
             joystick.gameObject.SetActive(true);
+            MobileAction();
 #endif
         }
     }
@@ -102,7 +103,7 @@ public class NPCManager : NPCManagerBase
 
             Horizontal = joystick.Horizontal;
             Vertical = joystick.Vertical;
-            
+
 #else
                 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
@@ -110,14 +111,15 @@ public class NPCManager : NPCManagerBase
 
                 Horizontal = inputPlayer.axisHorizontal;
                 Vertical = inputPlayer.axisVertical;
-#endif                
-            }
-            if (inputPlayer.isAttack)
-            {
-                animator.SetTrigger("Attack");
-                attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
 
+                if (inputPlayer.isAttack)
+                {
+                    animator.SetTrigger("Attack");
+                    attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
+                }
+#endif
             }
+
             SetNPCAnimation();
         }
 
@@ -167,5 +169,22 @@ public class NPCManager : NPCManagerBase
         {
             playerSprite.flipX = true;
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+#if PLATFORM_IOS || UNITY_ANDROID
+
+        MobileAction();
+#endif
+    }
+
+    private void MobileAction()
+    {
+        EventManager.Instance.RegisterEvent("PrimaryAction", () =>
+        {
+            animator.SetTrigger("Attack");
+            attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
+        });
     }
 }
