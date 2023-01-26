@@ -97,26 +97,10 @@ public class NPCManager : NPCManagerBase
                 Vector3 mov = new Vector3();
 
 #if PLATFORM_IOS || UNITY_ANDROID
-            mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
-            transform.position = Vector3.MoveTowards(
-                transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
-
-            Horizontal = joystick.Horizontal;
-            Vertical = joystick.Vertical;
+                mov = MovePlayerMobile();
 
 #else
-                mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
-                transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
-                    GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
-
-                Horizontal = inputPlayer.axisHorizontal;
-                Vertical = inputPlayer.axisVertical;
-
-                if (inputPlayer.isAttack)
-                {
-                    animator.SetTrigger("Attack");
-                    attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
-                }
+                mov = MovePlayerKeyboard();
 #endif
             }
 
@@ -124,6 +108,35 @@ public class NPCManager : NPCManagerBase
         }
 
         FlipSprite();
+    }
+
+    private Vector3 MovePlayerMobile()
+    {
+        Vector3 mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
+        transform.position = Vector3.MoveTowards(
+transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+
+        Horizontal = joystick.Horizontal;
+        Vertical = joystick.Vertical;
+        return mov;
+    }
+
+    private Vector3 MovePlayerKeyboard()
+    {
+        Vector3 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
+            GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+
+        Horizontal = inputPlayer.axisHorizontal;
+        Vertical = inputPlayer.axisVertical;
+
+        if (inputPlayer.isAttack)
+        {
+            animator.SetTrigger("Attack");
+            attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
+        }
+
+        return mov;
     }
 
     private void SetNPCAnimation()
