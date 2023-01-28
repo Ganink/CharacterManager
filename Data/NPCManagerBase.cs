@@ -22,8 +22,11 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
     [HideInInspector] public Transform thisTransform;
     [HideInInspector] public bool facingRight = true;
 
+    [HideInInspector] public NPCController characterController;
+
     public void Start()
     {
+        characterController = new NPCController();
         CommandHelper.AddConsoleCheats("npcmanager.getcainfo", "current caracter attributes user", () => GetCharacterAttributesInfo());
     }
 

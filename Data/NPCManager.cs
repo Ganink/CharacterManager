@@ -19,7 +19,6 @@ public class NPCManager : NPCManagerBase
 #endif
 
     private InputPlayer inputPlayer;
-    private NPCController characterController;
 
     private float Horizontal;
     private float Vertical;
@@ -39,7 +38,6 @@ public class NPCManager : NPCManagerBase
         {
             SetNPC();
             inputPlayer = GetComponent<InputPlayer>();
-            characterController = new NPCController();
             mainCamera = GetCamera();
             characterController.SetMainCamera(this.transform);
             MinimapSettings.Instance.SetMinimap(this.transform); //need abstract more this call
@@ -114,7 +112,7 @@ public class NPCManager : NPCManagerBase
     {
         Vector3 mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
         transform.position = Vector3.MoveTowards(
-transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+        transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
         Horizontal = joystick.Horizontal;
         Vertical = joystick.Vertical;
