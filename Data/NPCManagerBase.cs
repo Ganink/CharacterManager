@@ -47,7 +47,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
 
     }
 
-    public void MoveNPC(NPCType npcType, InputPlayer inputPlayer = null)
+    public void MoveNPC(NPCType npcType)
     {
         switch (npcType)
         {
@@ -70,7 +70,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         if (canJump)
         {
             canJump = false;
-            rb2d.velocity = new Vector2(rb2d.velocity.x, characterController.GetCharacterAttributes().GetJumpPower());
+            //rb2d.velocity = new Vector2(rb2d.velocity.x, characterController.GetCharacterAttributes().GetJumpPower());
         }
 
     }
@@ -98,7 +98,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         }
 
         // Apply movement velocity
-        rb2d.velocity = new Vector2((moveDirection) * npcAttributes.GetSpeedUser(), rb2d.velocity.y);
+        rb2d.velocity = new Vector2((moveDirection) * npcAttributes.Speed, rb2d.velocity.y);
 
         // Simple debug
         Debug.DrawLine(groundCheckPos, groundCheckPos - new Vector3(0, colliderRadius, 0),
@@ -110,7 +110,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
     public void MoveToTarget(Vector2 dirToTarget)
     {
         transform.position += (Vector3)dirToTarget *
-                              (npcAttributes.speedUser * Time.deltaTime);
+                              (npcAttributes.Speed * Time.deltaTime);
     }
     
     virtual public void MovePlayer()

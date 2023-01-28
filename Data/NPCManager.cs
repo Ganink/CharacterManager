@@ -82,7 +82,7 @@ public class NPCManager : NPCManagerBase
         }
 #endif
 
-        MoveNPC(NPCType.Player, inputPlayer);
+        MoveNPC(NPCType.Player);
     }
 
     public override void MovePlayer()
@@ -92,14 +92,7 @@ public class NPCManager : NPCManagerBase
             if (canMove)
             {
                 base.MovePlayer();
-                Vector3 mov = new Vector3();
-
-#if PLATFORM_IOS || UNITY_ANDROID
-                mov = MovePlayerMobile();
-
-#else
-                mov = MovePlayerKeyboard();
-#endif
+                Vector3 mov = MovePlayerFlow();
             }
 
             SetNPCAnimation();
@@ -108,39 +101,38 @@ public class NPCManager : NPCManagerBase
         FlipSprite();
     }
 
+    private Vector3 MovePlayerFlow()
+    {
 #if PLATFORM_IOS || UNITY_ANDROID
-    private Vector3 MovePlayerMobile()
-    {
-        Vector3 mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
-        transform.position = Vector3.MoveTowards(
-        transform.position, transform.position + mov, characterController.GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
-
-        Horizontal = joystick.Horizontal;
-        Vertical = joystick.Vertical;
-        return mov;
-    }
-#endif
-
-    private Vector3 MovePlayerKeyboard()
-    {
-        Vector3 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
-            characterController.GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
-
-        Horizontal = inputPlayer.axisHorizontal;
-        Vertical = inputPlayer.axisVertical;
-
+        Vector3 mov = Flow(joystick.Horizontal, joystick.Vertical);
+#else
+        Vector3 mov = Flow(inputPlayer.axisHorizontal, inputPlayer.axisVertical);
         if (inputPlayer.isAttack)
         {
             animator.SetTrigger("Attack");
             attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
         }
+#endif
+
+        return mov;
+    }
+
+    private Vector3 Flow(float axisHorizontal, float axisVertical)
+    {
+        Vector3 mov = new Vector3(axisHorizontal, axisVertical, 0);
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
+            characterController.GetCharacterAttributes().Speed * Time.deltaTime);
+
+        Horizontal = axisHorizontal;
+        Vertical = axisVertical;
 
         return mov;
     }
 
     private void SetNPCAnimation()
     {
+        // TODO
+
         if (Horizontal != 0 || Vertical != 0)
         {
             SetAnimPosition();
@@ -174,13 +166,20 @@ public class NPCManager : NPCManagerBase
 
     private void FlipSprite()
     {
-        if (Horizontal > 0 && Mathf.Abs(Vertical) < Mathf.Abs(Horizontal))
+        if (PhotonNetwork.InRoom)
         {
-            playerSprite.flipX = false;
+            // TODO ONLINE
         }
-        else if (Horizontal != 0)
+        else
         {
-            playerSprite.flipX = true;
+            if (Horizontal > 0 && Mathf.Abs(Vertical) < Mathf.Abs(Horizontal))
+            {
+                playerSprite.flipX = false;
+            }
+            else if (Horizontal != 0)
+            {
+                playerSprite.flipX = true;
+            }
         }
     }
 

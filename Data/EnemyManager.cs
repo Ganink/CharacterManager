@@ -28,7 +28,7 @@ public class EnemyManager : NPCManagerBase
             //transform.rotation = Quaternion.AngleAxis(angulo, Vector3.forward);
             //transform.Rotate(0, 0, -90);
 
-            transform.position = Vector2.MoveTowards(transform.position, player.position, characterController.GetCharacterAttributes().speedUser * Time.fixedDeltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.position, characterController.GetCharacterAttributes().Speed * Time.fixedDeltaTime);
         } 
     }
 

@@ -46,7 +46,7 @@ public class NPCController
 
     public void GetCharacterAttributesInfo()
     {
-        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} lifepoints: {npcAttributes.lifePoints} manaPoints: {npcAttributes.manaPoints} speedUser: {npcAttributes.speedUser}";
+        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} maxlifepoints: {npcAttributes.MaxLifesPoints} maxmanaPoints: {npcAttributes.MaxManaPoints} speedUser: {npcAttributes.Speed}";
         Debug.Log(CAInfo);
     }
 }
