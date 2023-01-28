@@ -108,22 +108,24 @@ public class NPCManager : NPCManagerBase
         FlipSprite();
     }
 
+#if PLATFORM_IOS || UNITY_ANDROID
     private Vector3 MovePlayerMobile()
     {
         Vector3 mov = new Vector3(joystick.Horizontal, joystick.Vertical, 0);
         transform.position = Vector3.MoveTowards(
-        transform.position, transform.position + mov, GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+        transform.position, transform.position + mov, characterController.GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
         Horizontal = joystick.Horizontal;
         Vertical = joystick.Vertical;
         return mov;
     }
+#endif
 
     private Vector3 MovePlayerKeyboard()
     {
         Vector3 mov = new Vector3(inputPlayer.axisHorizontal, inputPlayer.axisVertical, 0);
         transform.position = Vector3.MoveTowards(transform.position, transform.position + mov,
-            GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
+            characterController.GetCharacterAttributes().GetSpeedUser() * Time.deltaTime);
 
         Horizontal = inputPlayer.axisHorizontal;
         Vertical = inputPlayer.axisVertical;

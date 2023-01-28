@@ -26,8 +26,8 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
 
     public void Start()
     {
-        characterController = new NPCController();
-        CommandHelper.AddConsoleCheats("npcmanager.getcainfo", "current caracter attributes user", () => GetCharacterAttributesInfo());
+        characterController = new NPCController(npcAttributes);
+        CommandHelper.AddConsoleCheats("npcmanager.getcainfo", "current caracter attributes user", () => characterController.GetCharacterAttributesInfo());
     }
 
     public void SetNPC()
@@ -63,36 +63,14 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         }
     }
 
-    public void JumpController(NPCType npcType, InputPlayer inputPlayer = null)
+    public void JumpController(InputPlayer inputPlayer)
     {
-        bool canJump = false;
-        switch (npcType)
-        {
-            case NPCType.NPC:
-                break;
-            case NPCType.Player:
-                if (inputPlayer != null)
-                {
-                    if (inputPlayer.isJump && isGrounded)
-                    {
-                        canJump = true;
-                    }
-                }
-                break;
-            case NPCType.Enemy:
-                if (isGrounded)
-                {
-                    canJump = true;
-                }
-                break;
-            case NPCType.Boss:
-                break;
-        }
+        bool canJump = characterController.CanJump(inputPlayer, isGrounded);
 
         if (canJump)
         {
             canJump = false;
-            rb2d.velocity = new Vector2(rb2d.velocity.x, GetCharacterAttributes().GetJumpPower());
+            rb2d.velocity = new Vector2(rb2d.velocity.x, characterController.GetCharacterAttributes().GetJumpPower());
         }
 
     }
@@ -134,11 +112,6 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         transform.position += (Vector3)dirToTarget *
                               (npcAttributes.speedUser * Time.deltaTime);
     }
-
-    public NPCAttributesSO GetCharacterAttributes()
-    {
-        return npcAttributes;
-    }
     
     virtual public void MovePlayer()
     {
@@ -153,11 +126,6 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
         return npcType;
     }
 
-    private void GetCharacterAttributesInfo()
-    {
-        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} lifepoints: {npcAttributes.lifePoints} manaPoints: {npcAttributes.manaPoints} speedUser: {npcAttributes.speedUser}";
-        Debug.Log(CAInfo);
-    }
 }
 
 public enum NPCType
