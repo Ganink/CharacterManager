@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9383060191df24845b349fd830593cf2, type: 3}
   m_Name: MainCharacter
   m_EditorClassIdentifier: 
-  nameUser: Player
-  speedUser: 5
-  jumpPower: 7
+  name: Hans
+  idToken: '-'
+  currentLevel: 1
+  xp: 0
+  gold: 100
+  gems: 0
+  strong: 5
+  speed: 5
+  defense: 5
+  maxLifesPoints: 400
+  maxManaPoints: 100
