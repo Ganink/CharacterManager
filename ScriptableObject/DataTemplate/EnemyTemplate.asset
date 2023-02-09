@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9383060191df24845b349fd830593cf2, type: 3}
   m_Name: EnemyTemplate
   m_EditorClassIdentifier: 
-  nameUser: Enemy
-  speedUser: 3
-  jumpPower: 0
-  lifePoints: 300
-  manaPoints: 0
+  name: X
+  idToken: 
+  currentLevel: 3
+  xp: 100
+  gold: 30
+  gems: 1
+  strong: 3
+  speed: 3
+  defense: 5
+  maxLifesPoints: 40
+  maxManaPoints: 0
