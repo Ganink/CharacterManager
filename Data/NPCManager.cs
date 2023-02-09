@@ -1,5 +1,4 @@
 using System;
-using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(UserSettings))]
@@ -72,18 +71,6 @@ public class NPCManager : NPCManagerBase
     protected void Update()
     {
         base.Update();
-#if PHOTON_UNITY_NETWORKING
-        if (PhotonNetwork.InRoom && !gameObject.GetComponent<PhotonView>().IsMine)
-        {
-            if (gameObject.GetComponentInChildren<PanelChat>() != null)
-            {
-                gameObject.GetComponentInChildren<PanelChat>().gameObject.SetActive(false);
-            }
-            mainCamera.SetActive(false);
-            return;
-        }
-#endif
-
         MoveNPC(NPCType.Player, inputPlayer);
     }
 

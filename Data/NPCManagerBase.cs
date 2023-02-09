@@ -1,6 +1,5 @@
 ﻿using System;
 using IngameDebugConsole;
-using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -152,7 +151,7 @@ public class NPCManagerBase : MonoBehaviour, INPCManager
 
     private void GetCharacterAttributesInfo()
     {
-        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} lifepoints: {npcAttributes.lifePoints} manaPoints: {npcAttributes.manaPoints} speedUser: {npcAttributes.speedUser}";
+        string CAInfo = $"nickname: NickName lifepoints: {npcAttributes.lifePoints} manaPoints: {npcAttributes.manaPoints} speedUser: {npcAttributes.speedUser}";
         Debug.Log(CAInfo);
     }
 }
