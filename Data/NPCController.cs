@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using Photon.Pun;
 using UnityEngine;
 
 public class NPCController
@@ -46,7 +45,7 @@ public class NPCController
 
     public void GetCharacterAttributesInfo()
     {
-        string CAInfo = $"nickname: {PhotonNetwork.LocalPlayer.NickName} maxlifepoints: {npcAttributes.MaxLifesPoints} maxmanaPoints: {npcAttributes.MaxManaPoints} speedUser: {npcAttributes.Speed}";
+        string CAInfo = $"nickname: maxlifepoints: {npcAttributes.MaxLifesPoints} maxmanaPoints: {npcAttributes.MaxManaPoints} speedUser: {npcAttributes.Speed}";
         Debug.Log(CAInfo);
     }
 }
