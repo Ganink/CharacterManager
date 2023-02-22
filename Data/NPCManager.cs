@@ -1,4 +1,5 @@
 using System;
+using Greenvillex.RepositoryManager;
 using Photon.Pun;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ public class NPCManager : NPCManagerBase
 
     private void MobileAction()
     {
-        EventManager.Instance.RegisterEvent("PrimaryAction", () =>
+        RepositoryManager.Get<GameEvents>().RegisterEvent("PrimaryAction", () =>
         {
             animator.SetTrigger("Attack");
             attackManager.PlayerAttack(100, inputPlayer.lookDir/*GetCharacterAttributes().Damage*/); // maybe we can use events animation
