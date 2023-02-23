@@ -3,7 +3,6 @@ using Greenvillex.RepositoryManager;
 using Photon.Pun;
 using UnityEngine;
 
-[RequireComponent(typeof(UserSettings))]
 [RequireComponent(typeof(InputPlayer))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
@@ -46,6 +45,7 @@ public class NPCManager : NPCManagerBase
             animator = GetComponent<Animator>();
             attackManager = GetComponent<AttackManager>();
             canMove = true;
+            RepositoryManager.Get<UserSettingsManager>().Initialized();
             //hasCodeRun = Animator.StringToHash("walk");
 
 #if PLATFORM_IOS || UNITY_ANDROID
@@ -84,6 +84,7 @@ public class NPCManager : NPCManagerBase
 #endif
 
         MoveNPC(NPCType.Player);
+        RepositoryManager.Get<UserSettingsManager>().CheckLifes();
     }
 
     public override void MovePlayer()
