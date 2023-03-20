@@ -45,7 +45,7 @@ public class NPCManager : NPCManagerBase
             animator = GetComponent<Animator>();
             attackManager = GetComponent<AttackManager>();
             canMove = true;
-            RepositoryManager.Get<UserSettingsManager>().Initialized();
+            RepositoryManager.Get<UserSettingsManager>().Initialized(characterController.GetCharacterAttributes());
             //hasCodeRun = Animator.StringToHash("walk");
 
 #if PLATFORM_IOS || UNITY_ANDROID

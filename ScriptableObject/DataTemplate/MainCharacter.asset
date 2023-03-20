@@ -21,5 +21,5 @@ MonoBehaviour:
   strong: 5
   speed: 5
   defense: 5
-  maxLifesPoints: 400
-  maxManaPoints: 100
+  maxLifesPoints: 2500
+  maxManaPoints: 400
